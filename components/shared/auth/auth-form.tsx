@@ -29,7 +29,7 @@ export const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
   }
 
   return (
-    <Card className="w-full max-w-sm">
+    <Card className="w-full max-w-sm mx-4">
       <CardHeader className="flex flex-col items-center gap-4">
         <div className="flex items-center justify-center gap-2">
           <Image src="/logo.svg" width={38} height={32} alt="app logo" />
