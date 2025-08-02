@@ -1,5 +1,5 @@
 import { AuthForm } from "@/components/shared/auth/auth-form";
 
 export default function SignInPage() {
-  return <AuthForm />;
+  return <AuthForm type="sign-in" />;
 }

@@ -1,8 +1,8 @@
 // import { CreateAssistantDTO } from "@vapi-ai/web/dist/api";
 // import { z } from "zod";
 
-export const APP_NAME = process.env.APP_NAME || "My App";
-export const APP_DESCRIPTION = process.env.APP_DESCRIPTION || "My App Description";
+export const APP_NAME = process.env.NEXT_PUBLIC_APP_NAME || "My App";
+export const APP_DESCRIPTION = process.env.NEXT_PUBLIC_APP_DESCRIPTION || "My App Description";
 
 // export const mappings = {
 //   "react.js": "react",
