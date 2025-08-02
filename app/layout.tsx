@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import { Mona_Sans } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { APP_DESCRIPTION, APP_NAME } from "@/constants";
 
-const monaSans = Mona_Sans({
+const inter = Inter({
   variable: "--font-mona-sans",
   subsets: ["latin"],
 });
@@ -14,14 +14,14 @@ export const metadata: Metadata = {
   description: APP_DESCRIPTION,
 };
 
-export default function RootLayout({
+export default function MainLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${monaSans.variable} antialiased`}>{children}</body>
+      <body className={`${inter.className} antialiased pattern`}>{children}</body>
     </html>
   );
 }
