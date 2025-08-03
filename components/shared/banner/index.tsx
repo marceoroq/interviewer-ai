@@ -11,7 +11,7 @@ export const Banner = () => {
         <p className="text-lg text-accent-foreground">
           Practice on real interview questions and get feedback from AI
         </p>
-        <Button className="w-full md:w-fit px-8">Start an Interview</Button>
+        <Button className="w-full md:w-fit">Start an Interview</Button>
       </div>
       <Image
         src="/robot.png"
