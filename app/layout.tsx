@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 
 import { APP_DESCRIPTION, APP_NAME } from "@/constants";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({
   variable: "--font-mona-sans",
@@ -21,7 +22,10 @@ export default function MainLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={`${inter.className} antialiased pattern`}>{children}</body>
+      <body className={`${inter.className} antialiased pattern`}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }
