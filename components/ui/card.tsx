@@ -2,17 +2,39 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-function Card({ className, children, ...props }: React.ComponentProps<"div">) {
+const variantBackgroundClasses = {
+  default: "bg-linear-to-t from-[#08090D] to-[#1A1C20]",
+  alternative: "bg-linear-to-t from-[#0C0B16] to-[#181537]",
+};
+
+const variantBorderClasses = {
+  default: "bg-linear-to-b from-[#4B4D4F] to-[#4B4D4F33]",
+  alternative: "bg-linear-to-b from-[#4B4D4F] to-[#4B4D4F33]",
+};
+
+function Card({
+  className,
+  internalClassName,
+  variant = "alternative",
+  children,
+  ...props
+}: React.ComponentProps<"div"> & {
+  variant?: keyof typeof variantBackgroundClasses;
+  internalClassName?: string;
+}) {
   return (
     <div
       data-slot="card"
-      className={cn(
-        "w-full p-0.5 max-w-sm rounded-2xl bg-linear-to-b from-[#4B4D4F] to-[#4B4D4F33] shadow-sm",
-        className
-      )}
+      className={cn("w-full p-0.5 rounded-2xl shadow-sm", variantBorderClasses[variant], className)}
       {...props}
     >
-      <div className="overflow-hidden flex flex-col gap-6 rounded-xl border-0 py-6 bg-linear-to-t from-[#08090D] to-[#1A1C20] text-card-foreground">
+      <div
+        className={cn(
+          "overflow-hidden h-full flex flex-col gap-6 rounded-xl border-0 py-6 bg-linear-to-t text-card-foreground",
+          internalClassName,
+          variantBackgroundClasses[variant]
+        )}
+      >
         {children}
       </div>
     </div>

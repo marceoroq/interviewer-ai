@@ -96,3 +96,5 @@ interface InterviewFormProps {
 interface TechIconProps {
   techStack: string[];
 }
+
+export type CallStatus = "CONNECTING" | "ACTIVE" | "INACTIVE" | "FINISHED";
