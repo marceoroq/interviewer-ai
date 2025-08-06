@@ -3,8 +3,15 @@
 import Link from "next/link";
 import Image from "next/image";
 import { z } from "zod";
+import { auth } from "@/lib/firebase/client";
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { FirebaseError } from "firebase/app";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+
+import { signInAction, signUpAction } from "@/lib/actions/auth.actions";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormFieldInput } from "@/components/shared/auth/form-field-input";
@@ -15,17 +22,83 @@ import { APP_NAME } from "@/constants";
 import { signInFormSchema, signUpFormSchema } from "@/lib/validators";
 
 export const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
+  const router = useRouter();
   const isSignIn = type === "sign-in";
   const formSchema = isSignIn ? signInFormSchema : signUpFormSchema;
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      password: "",
+    },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
+  async function handleSignIn(values: z.infer<typeof formSchema>) {
+    const { email, password } = values;
+
+    try {
+      const userCredentials = await signInWithEmailAndPassword(auth, email, password);
+      const idToken = await userCredentials.user.getIdToken();
+
+      if (!idToken) {
+        toast.error("Failed to sign in. Please try again.");
+        return;
+      }
+
+      const result = await signInAction({ idToken });
+
+      if (!result?.success) {
+        toast.error(result.message);
+        return;
+      }
+
+      toast.success(result.message);
+      router.push("/");
+    } catch (error) {
+      if (error instanceof FirebaseError && error.code === "auth/invalid-credential") {
+        toast.error("Invalid email or password");
+        return;
+      }
+
+      toast.error("Failed to sign in. Please try again.");
+    }
+  }
+
+  async function handleSignUp(values: z.infer<typeof formSchema>) {
+    const { name, email, password } = values;
+    try {
+      const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+
+      const response = await signUpAction({
+        uid: userCredentials.user.uid,
+        name: name!,
+        email,
+      });
+
+      if (!response?.success) {
+        toast.error(response.message);
+        return;
+      }
+
+      toast.success(response.message);
+      router.push("/sign-in");
+    } catch (error) {
+      if (error instanceof FirebaseError && error.code === "auth/email-already-in-use") {
+        toast.error("Email already in use. Try with another email or sign in.");
+        return;
+      }
+      toast.error("Failed to sign up. Please try again.");
+    }
+  }
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (isSignIn) {
+      await handleSignIn(values);
+    } else {
+      await handleSignUp(values);
+    }
   }
 
   return (
@@ -65,7 +138,9 @@ export const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
               autoComplete="current-password"
               type="password"
             />
-            <Button type="submit">{isSignIn ? "Sign in" : "Create an Account"}</Button>
+            <Button className="cursor-pointer" type="submit">
+              {isSignIn ? "Sign in" : "Create an Account"}
+            </Button>
           </form>
         </Form>
         <p className="text-sm text-center">
