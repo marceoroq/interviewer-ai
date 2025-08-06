@@ -4,6 +4,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme {
+  --color-success-100: #49de50;
+  --color-success-200: #42c748;
+  --color-destructive-100: #f75353;
+  --color-destructive-200: #c44141;
+
   --bg-pattern: url("/pattern.png");
 }
 
@@ -167,4 +172,23 @@
 
 @utility pattern {
   @apply bg-(image:--bg-pattern) bg-top bg-no-repeat;
+}
+
+@utility section {
+  @apply flex max-w-7xl mx-auto w-full px-8 xl:px-4 py-4 flex-col h-screen gap-6;
+}
+
+@utility animate-fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
