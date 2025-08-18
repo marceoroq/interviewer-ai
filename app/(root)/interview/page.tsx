@@ -1,11 +1,22 @@
+import { generateText } from "ai";
+import { createGoogleGenerativeAI } from "@ai-sdk/google";
+
 import { Agent } from "@/components/shared/agent";
 import { Message } from "@/components/shared/message";
 import { CallButton } from "@/components/shared/call-button";
 
-export default function InterviewPage() {
+const google = createGoogleGenerativeAI({
+  apiKey: process.env.GOOGLE_GENERATIVE_API_KEY,
+});
+
+export default async function InterviewPage() {
+  const { text } = await generateText({
+    model: google("gemini-2.5-flash"),
+    prompt: "Write a message of welcome, pretty short",
+  });
   const callStatus = "ACTIVE";
 
-  const messages = ["What is your name?", "My name is Chelo, nice to meet you!"];
+  const messages = ["What is your name?", "My name is Chelo, nice to meet you!", text];
   const lastMessage = messages.at(-1);
 
   return (
