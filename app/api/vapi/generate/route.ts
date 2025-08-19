@@ -29,7 +29,7 @@ export async function POST(request: Request) {
       level,
       userid,
       finalized: true,
-      techstack: techstack.split(","),
+      techstack: techstack.split(",").map((tech: string) => tech.trim()),
       questions: JSON.parse(questions),
       coverImage: "/covers/adobe.png", // then change by cover uploaded by user
       created_at: new Date().toISOString(),
