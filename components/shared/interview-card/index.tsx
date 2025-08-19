@@ -21,7 +21,7 @@ export const InterviewCard = ({ interview }: { interview: Interview }) => {
         <Image
           width={90}
           height={90}
-          src={`/covers${interviewCovers[Number(interview.id)]}`}
+          src={interview.coverImage ?? `/covers${interviewCovers[Number(interview.id)]}`}
           alt={interview.role}
         />
         <h3 className="text-xl font-semibold">{interview.role} Interview</h3>
