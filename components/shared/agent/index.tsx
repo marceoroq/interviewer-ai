@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
@@ -5,6 +7,7 @@ import { cn } from "@/lib/utils";
 interface AgentProps {
   username: string;
   avatar?: string;
+  type?: "generate" | "interview";
   variant?: "default" | "alternative";
   isSpeaking?: boolean;
   className?: string;
@@ -29,7 +32,7 @@ export const Agent = ({
           )}
         </div>
 
-        <h3 className="font-medium text-xl">{username}</h3>
+        <h3 className="font-medium text-xl capitalize">{username}</h3>
       </CardContent>
     </Card>
   );
