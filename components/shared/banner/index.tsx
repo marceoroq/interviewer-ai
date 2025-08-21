@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export const Banner = () => {
   return (
@@ -11,7 +12,9 @@ export const Banner = () => {
         <p className="text-lg text-accent-foreground">
           Practice on real interview questions and get feedback from AI
         </p>
-        <Button className="w-full md:w-fit">Start an Interview</Button>
+        <Button className="w-full md:w-fit cursor-pointer" asChild>
+          <Link href="/interview">Start an Interview</Link>
+        </Button>
       </div>
       <Image
         src="/robot.png"
