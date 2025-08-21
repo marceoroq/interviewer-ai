@@ -103,6 +103,10 @@ export const techMappings: Record<string, string> = {
   netlify: "netlify",
   vercel: "vercel",
   "aws amplify": "amplify",
+  "spring boot": "spring",
+  sql: "sqldeveloper",
+  hibernate: "hibernate",
+  supabase: "supabase",
 };
 
 // export const interviewer: CreateAssistantDTO = {
