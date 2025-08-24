@@ -1,7 +1,17 @@
 import "server-only";
 
 import { db } from "@/lib/firebase/admin";
-import { GetLatestInterviewsParams, Interview } from "@/types";
+import { Feedback, GetLatestInterviewsParams, Interview } from "@/types";
+
+const getInterviewById = async (interviewId: string): Promise<Interview | null> => {
+  const interview = await db.collection("interviews").doc(interviewId).get();
+
+  if (!interview.exists) {
+    return null;
+  }
+
+  return interview.data() as Interview | null;
+};
 
 const getInterviewsByUserId = async (userId: string): Promise<Interview[]> => {
   const interviews = await db.collection("interviews").where("userid", "==", userId).get();
@@ -28,9 +38,21 @@ const getLatestInterviews = async (params: GetLatestInterviewsParams): Promise<I
   })) as Interview[];
 };
 
+const getFeedback = async (interviewId: string) => {
+  const feedback = await db.collection("feedback").doc(interviewId).get();
+
+  if (!feedback.exists) {
+    return null;
+  }
+
+  return feedback.data() as Feedback;
+};
+
 const InterviewService = {
+  getInterviewById,
   getInterviewsByUserId,
   getLatestInterviews,
+  getFeedback,
 };
 
 export { InterviewService };

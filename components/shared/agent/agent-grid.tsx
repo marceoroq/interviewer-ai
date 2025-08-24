@@ -4,16 +4,21 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { vapi } from "@/lib/vapi";
+import { createFeedbackAction } from "@/lib/actions/feedback.actions";
 
 import { Agent } from "@/components/shared/agent";
 import { Message } from "@/components/shared/message";
 import { CallButton } from "@/components/shared/call-button";
+
 import { CallStatus } from "@/types";
+import { interviewer } from "@/constants";
 
 interface AgentGridProps {
   username: string;
   userId: string;
-  type: "generate" | "disconnect";
+  type: "generate" | "interview";
+  interviewId?: string;
+  questions?: string[];
 }
 
 interface SavedMessage {
@@ -21,12 +26,11 @@ interface SavedMessage {
   content: string;
 }
 
-export const AgentGrid = ({ username, userId, type }: AgentGridProps) => {
+export const AgentGrid = ({ username, userId, type, interviewId, questions }: AgentGridProps) => {
   const router = useRouter();
   const [callStatus, setCallStatus] = useState<CallStatus>("INACTIVE");
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [messages, setMessages] = useState<SavedMessage[]>([]);
-
   const lastMessage = messages.at(-1)?.content;
 
   useEffect(() => {
@@ -77,32 +81,29 @@ export const AgentGrid = ({ username, userId, type }: AgentGridProps) => {
   }, []);
 
   useEffect(() => {
-    // const handleGenerateFeedback = async (messages: SavedMessage[]) => {
-    //   console.log("handleGenerateFeedback");
+    const handleGenerateFeedback = async (messages: SavedMessage[]) => {
+      const { success, feedbackId: id } = await createFeedbackAction({
+        interviewId: interviewId!,
+        userId: userId!,
+        transcript: messages,
+      });
 
-    //   const { success, feedbackId: id } = await createFeedback({
-    //     interviewId: interviewId!,
-    //     userId: userId!,
-    //     transcript: messages,
-    //     feedbackId,
-    //   });
-
-    //   if (success && id) {
-    //     router.push(`/interview/${interviewId}/feedback`);
-    //   } else {
-    //     console.log("Error saving feedback");
-    //     router.push("/");
-    //   }
-    // };
+      if (success && id) {
+        router.push(`/interview/${interviewId}/feedback`);
+      } else {
+        console.log("Error saving feedback");
+        router.push("/");
+      }
+    };
 
     if (callStatus === "FINISHED") {
       if (type === "generate") {
         router.push("/");
       } else {
-        // handleGenerateFeedback(messages);
+        handleGenerateFeedback(messages);
       }
     }
-  }, [callStatus, router, type, userId]);
+  }, [callStatus, router, type, userId, interviewId, messages]);
 
   const handleCall = async () => {
     setCallStatus("CONNECTING");
@@ -115,17 +116,15 @@ export const AgentGrid = ({ username, userId, type }: AgentGridProps) => {
         },
       });
     } else {
-      // let formattedQuestions = "";
-      // if (questions) {
-      //   formattedQuestions = questions
-      //     .map((question) => `- ${question}`)
-      //     .join("\n");
-      // }
-      // await vapi.start(interviewer, {
-      //   variableValues: {
-      //     questions: formattedQuestions,
-      //   },
-      // });
+      let formattedQuestions = "";
+      if (questions) {
+        formattedQuestions = questions.map((question) => `- ${question}`).join("\n");
+      }
+      await vapi.start(interviewer, {
+        variableValues: {
+          questions: formattedQuestions,
+        },
+      });
     }
   };
 
