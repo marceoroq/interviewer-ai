@@ -50,7 +50,10 @@ const getFeedback = async (interviewId: string, userId: string) => {
   }
 
   // only should have one feedback per interview and user
-  return feedback.docs[0].data() as Feedback;
+  return {
+    ...feedback.docs[0].data(),
+    id: feedback.docs[0].id,
+  } as Feedback;
 };
 
 const InterviewService = {
