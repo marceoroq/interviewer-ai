@@ -96,7 +96,7 @@ export default async function FeedbackDetailsPage({ params }: { params: Promise<
           <Button asChild variant="secondary" className="flex-grow cursor-pointer">
             <Link href="/">Back to Dashboard</Link>
           </Button>
-          <Button className="flex-grow cursor-pointer">
+          <Button asChild className="flex-grow cursor-pointer">
             <Link href={`/interview/${id}`}>Retake Interview</Link>
           </Button>
         </div>
