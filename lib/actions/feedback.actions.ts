@@ -4,6 +4,7 @@ import { google } from "@ai-sdk/google";
 import { generateObject } from "ai";
 
 import { db } from "@/lib/firebase/admin";
+import { InterviewService } from "@/services/interview.service";
 
 import { feedbackSchema } from "@/constants";
 import { CreateFeedbackParams } from "@/types";
@@ -63,6 +64,20 @@ export async function createFeedbackAction(params: CreateFeedbackParams) {
       system:
         "You are a professional interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories",
     });
+
+    const previousFeedback = await InterviewService.getFeedback(interviewId, userId);
+
+    if (previousFeedback) {
+      await db.collection("feedback").doc(previousFeedback.id).update({
+        totalScore: object.totalScore,
+        categoryScores: object.categoryScores,
+        strengths: object.strengths,
+        areasForImprovement: object.areasForImprovement,
+        finalAssessment: object.finalAssessment,
+      });
+
+      return { success: true, feedbackId: previousFeedback.id };
+    }
 
     const feedback = await db.collection("feedback").add({
       userId,

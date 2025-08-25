@@ -13,17 +13,18 @@ export default async function InterviewDetailsPage({
   params: Promise<{ id: string }>;
 }) {
   const id = (await params).id;
-  const interviewData = await InterviewService.getInterviewById(id);
 
+  const interviewData = await InterviewService.getInterviewById(id);
   if (!interviewData) {
     return notFound();
   }
 
   const user = await getCurrentUser();
-
   if (!user) {
     return redirect("/sign-in");
   }
+
+  const feedback = await InterviewService.getFeedback(id, user.id);
 
   return (
     <section className="section">
@@ -37,12 +38,12 @@ export default async function InterviewDetailsPage({
               height={40}
               className="rounded-full object-cover size-10"
             />
-            <h3 className="capitalize">{interviewData.role} Interview</h3>
+            <h3 className="text-2xl font-semibold capitalize">{interviewData.role} Interview</h3>
           </div>
 
           <DisplayTechStack techstack={interviewData.techstack} />
         </div>
-        <p className="bg-slate-700 px-4 py-2 rounded-lg h-fit">{interviewData.type}</p>
+        <p className="bg-slate-700 px-4 py-2 rounded-lg h-fit capitalize">{interviewData.type}</p>
       </div>
       <AgentGrid
         username={user.name}
@@ -50,8 +51,8 @@ export default async function InterviewDetailsPage({
         type="interview"
         interviewId={id}
         questions={interviewData.questions}
+        hasFeedback={!!feedback}
       />
-      <pre>{JSON.stringify(interviewData, null, 2)}</pre>;
     </section>
   );
 }

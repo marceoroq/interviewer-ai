@@ -1,9 +1,14 @@
-import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
+import dayjs from "dayjs";
+import { redirect } from "next/navigation";
+import { CalendarDaysIcon, StarIcon } from "lucide-react";
+
 import { getCurrentUser } from "@/lib/auth";
 import { InterviewService } from "@/services/interview.service";
-import dayjs from "dayjs";
-import { CalendarDaysIcon, StarIcon } from "lucide-react";
-import { redirect } from "next/navigation";
+
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { VeredictBadge } from "@/components/shared/veredict-badge";
 
 export default async function FeedbackDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const id = (await params).id;
@@ -19,7 +24,7 @@ export default async function FeedbackDetailsPage({ params }: { params: Promise<
   const interview = await InterviewService.getInterviewById(id)!;
 
   return (
-    <section className="section h-fit max-w-4xl pb-20">
+    <section className="section h-fit max-w-4xl pb-8">
       <h1 className="text-5xl font-bold mb-4 text-center">
         Feedback on the Interview — {interview?.role}
       </h1>
@@ -83,10 +88,18 @@ export default async function FeedbackDetailsPage({ params }: { params: Promise<
           </div>
         )}
 
-        <p className="text-3xl font-bold mt-16">
-          Final Veredict:{" "}
-          <span className="text-red-400 bg-slate-700 py-1 px-4 rounded-full">Not Recommended</span>
+        <p className="text-3xl font-bold my-8">
+          Final Veredict: <VeredictBadge totalScore={feedback?.totalScore || 0} />
         </p>
+
+        <div className="flex gap-4 w-full mt-16">
+          <Button asChild variant="secondary" className="flex-grow cursor-pointer">
+            <Link href="/">Back to Dashboard</Link>
+          </Button>
+          <Button className="flex-grow cursor-pointer">
+            <Link href={`/interview/${id}`}>Retake Interview</Link>
+          </Button>
+        </div>
       </div>
     </section>
   );

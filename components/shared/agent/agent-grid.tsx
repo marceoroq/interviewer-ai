@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 import { vapi } from "@/lib/vapi";
 import { createFeedbackAction } from "@/lib/actions/feedback.actions";
 
 import { Agent } from "@/components/shared/agent";
+import { Button } from "@/components/ui/button";
 import { Message } from "@/components/shared/message";
 import { CallButton } from "@/components/shared/call-button";
 
@@ -19,6 +21,7 @@ interface AgentGridProps {
   type: "generate" | "interview";
   interviewId?: string;
   questions?: string[];
+  hasFeedback?: boolean;
 }
 
 interface SavedMessage {
@@ -26,7 +29,14 @@ interface SavedMessage {
   content: string;
 }
 
-export const AgentGrid = ({ username, userId, type, interviewId, questions }: AgentGridProps) => {
+export const AgentGrid = ({
+  username,
+  userId,
+  type,
+  interviewId,
+  questions,
+  hasFeedback,
+}: AgentGridProps) => {
   const router = useRouter();
   const [callStatus, setCallStatus] = useState<CallStatus>("INACTIVE");
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -148,13 +158,25 @@ export const AgentGrid = ({ username, userId, type, interviewId, questions }: Ag
 
       {messages.length > 0 && <Message message={lastMessage!} />}
 
-      <div className="w-full flex justify-center">
+      <div className="w-full flex gap-2 justify-center">
         <CallButton
           callStatus={callStatus}
           handleCall={handleCall}
           handleDisconnect={handleDisconnect}
         />
       </div>
+
+      {hasFeedback && (
+        <div className="flex flex-col gap-4 items-center mt-8">
+          <p className="text-center italic text-sm">
+            This interview has been completed. You can check the feedback by clicking the button
+            below. If you want to retake the interview, click the Call button.
+          </p>
+          <Button asChild className="bg-teal-600 hover:bg-teal-700">
+            <Link href={`/interview/${interviewId}/feedback`}>Check Feedback</Link>
+          </Button>
+        </div>
+      )}
     </>
   );
 };
