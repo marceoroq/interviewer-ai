@@ -21,7 +21,7 @@ export interface Interview {
   techstack: string[];
   createdAt: string;
   coverImage: string;
-  userId: string;
+  userid: string;
   type: string;
   finalized: boolean;
 }

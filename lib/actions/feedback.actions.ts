@@ -64,8 +64,9 @@ export async function createFeedbackAction(params: CreateFeedbackParams) {
         "You are a professional interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories",
     });
 
-    await db.collection("feedback").doc(interviewId).set({
+    const feedback = await db.collection("feedback").add({
       userId,
+      interviewId,
       totalScore: object.totalScore,
       categoryScores: object.categoryScores,
       strengths: object.strengths,
@@ -74,7 +75,7 @@ export async function createFeedbackAction(params: CreateFeedbackParams) {
       createdAt: new Date().toISOString(),
     });
 
-    return { success: true, feedbackId: interviewId };
+    return { success: true, feedbackId: feedback.id };
   } catch (error) {
     console.error("Error creating feedback", error);
     return { success: false };

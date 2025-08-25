@@ -38,14 +38,19 @@ const getLatestInterviews = async (params: GetLatestInterviewsParams): Promise<I
   })) as Interview[];
 };
 
-const getFeedback = async (interviewId: string) => {
-  const feedback = await db.collection("feedback").doc(interviewId).get();
+const getFeedback = async (interviewId: string, userId: string) => {
+  const feedback = await db
+    .collection("feedback")
+    .where("interviewId", "==", interviewId)
+    .where("userId", "==", userId)
+    .get();
 
-  if (!feedback.exists) {
+  if (feedback.empty) {
     return null;
   }
 
-  return feedback.data() as Feedback;
+  // only should have one feedback per interview and user
+  return feedback.docs[0].data() as Feedback;
 };
 
 const InterviewService = {

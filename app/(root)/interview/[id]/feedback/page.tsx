@@ -1,12 +1,17 @@
 import { Separator } from "@/components/ui/separator";
+import { getCurrentUser } from "@/lib/auth";
 import { InterviewService } from "@/services/interview.service";
 import dayjs from "dayjs";
 import { CalendarDaysIcon, StarIcon } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export default async function FeedbackDetailsPage({ params }: { params: Promise<{ id: string }> }) {
   const id = (await params).id;
 
-  const feedback = await InterviewService.getFeedback(id);
+  const user = await getCurrentUser();
+  if (!user) redirect("/sign-in");
+
+  const feedback = await InterviewService.getFeedback(id, user.id);
   if (!feedback) {
     return <div>Feedback not found</div>;
   }
@@ -36,7 +41,7 @@ export default async function FeedbackDetailsPage({ params }: { params: Promise<
       <Separator />
 
       <div className="px-16">
-        <p className="mb-4 leading-6.5">{feedback?.finalAssessment}</p>
+        <p className="mb-6 leading-6.5">{feedback?.finalAssessment}</p>
 
         <div className="flex flex-col">
           <h2 className="text-3xl font-bold mb-4">Breakdown of Evaluation:</h2>
@@ -78,7 +83,7 @@ export default async function FeedbackDetailsPage({ params }: { params: Promise<
           </div>
         )}
 
-        <p className="text-3xl font-bold">
+        <p className="text-3xl font-bold mt-16">
           Final Veredict:{" "}
           <span className="text-red-400 bg-slate-700 py-1 px-4 rounded-full">Not Recommended</span>
         </p>
