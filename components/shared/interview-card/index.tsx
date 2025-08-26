@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import Image from "next/image";
 import { CalendarDaysIcon, StarIcon } from "lucide-react";
 
+import { getCurrentUser } from "@/lib/auth";
 import { InterviewService } from "@/services/interview.service";
 
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,6 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { interviewCovers } from "@/constants";
 import { Feedback, Interview } from "@/types";
 import { cn } from "@/lib/utils";
-import { getCurrentUser } from "@/lib/auth";
 
 export const InterviewCard = async ({ interview }: { interview: Interview }) => {
   const user = await getCurrentUser();
