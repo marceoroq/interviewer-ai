@@ -4,6 +4,9 @@ import { cookies } from "next/headers";
 import { db, auth } from "@/lib/firebase/admin";
 import { stripUndefined } from "@/lib/utils";
 
+import { signOut } from "firebase/auth";
+import { auth as clientAuth } from "@/lib/firebase/client";
+
 import { SignInParams, SignUpParams } from "@/types";
 import { ONE_WEEK } from "@/constants";
 
@@ -72,6 +75,33 @@ export async function signInWithGoogleAction(params: SignInParams) {
   } catch (error: unknown) {
     console.error("Error signing in:", error);
     return { success: false, message: "Invalid or expired token" };
+  }
+}
+
+export async function signOutAction() {
+  const cookieStore = await cookies();
+  const sessionCookie = cookieStore.get("session")?.value;
+
+  // Sign out from Firebase Browser Client
+  await signOut(clientAuth);
+
+  if (!sessionCookie) {
+    return { success: true, message: "User signed out successfully." };
+  }
+
+  // Sign out from Firebase Admin Client
+  try {
+    // Invalidate the Firebase Admin session
+    const decodedClaims = await auth.verifySessionCookie(sessionCookie);
+    await auth.revokeRefreshTokens(decodedClaims.sub);
+
+    // Delete the session cookie
+    cookieStore.delete("session");
+
+    return { success: true, message: "User signed out successfully." };
+  } catch (error: unknown) {
+    console.error("Error signing out:", error);
+    return { success: false, message: "Failed signing out." };
   }
 }
 

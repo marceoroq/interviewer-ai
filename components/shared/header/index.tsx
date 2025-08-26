@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { getCurrentUser } from "@/lib/auth";
 
+import { SignoutButton } from "@/components/shared/signout-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { APP_NAME } from "@/constants";
@@ -20,10 +21,15 @@ export const Header = async () => {
           </div>
         </Link>
 
-        <Avatar className="size-12">
-          <AvatarImage src={user!.avatar!} />
-          <AvatarFallback className="text-2xl">{user!.name.charAt(0).toUpperCase()}</AvatarFallback>
-        </Avatar>
+        <div className="flex gap-4 items-center">
+          <SignoutButton />
+          <Avatar className="size-12">
+            <AvatarImage src={user!.avatar!} />
+            <AvatarFallback className="text-2xl">
+              {user!.name.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+        </div>
       </div>
     </header>
   );
