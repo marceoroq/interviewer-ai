@@ -5,6 +5,7 @@ import Image from "next/image";
 import { z } from "zod";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
+import { FaGoogle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FirebaseError } from "firebase/app";
@@ -169,7 +170,7 @@ export const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
           </form>
         </Form>
         <Button className="cursor-pointer" type="submit" onClick={handleSignInWithGoogle}>
-          Sign in with Google
+          <FaGoogle className="inline-block w-4 h-4" /> Sign {isSignIn ? "in" : "up"} with Google
         </Button>
         <p className="text-sm text-center">
           {isSignIn ? "No account yet?" : "Already have an account?"}
