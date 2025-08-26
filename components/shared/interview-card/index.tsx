@@ -12,12 +12,13 @@ import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { interviewCovers } from "@/constants";
 import { Feedback, Interview } from "@/types";
 import { cn } from "@/lib/utils";
+import { getCurrentUser } from "@/lib/auth";
 
 export const InterviewCard = async ({ interview }: { interview: Interview }) => {
+  const user = await getCurrentUser();
+
   const feedback: Feedback | null =
-    interview.id && interview.userid
-      ? await InterviewService.getFeedback(interview.id, interview.userid)
-      : null;
+    interview.id && user!.id ? await InterviewService.getFeedback(interview.id, user!.id) : null;
 
   return (
     <Card className="justify-self-center">
