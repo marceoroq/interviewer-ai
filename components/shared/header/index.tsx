@@ -1,15 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
+
+import { getCurrentUser } from "@/lib/auth";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import { APP_NAME } from "@/constants";
 
-const user = {
-  name: "Chelo",
-  image: "/user-avatar.jpg",
-};
+export const Header = async () => {
+  const user = await getCurrentUser();
 
-export const Header = () => {
   return (
     <header className="flex items-center">
       <div className="flex w-full justify-between max-w-7xl mx-auto py-4 px-8 xl:px-4">
@@ -19,9 +19,10 @@ export const Header = () => {
             <h2 className="font-medium text-xl">{APP_NAME}</h2>
           </div>
         </Link>
+
         <Avatar className="size-12">
-          <AvatarImage src={user.image!} />
-          <AvatarFallback className="text-2xl">{user.name!.charAt(0).toUpperCase()}</AvatarFallback>
+          <AvatarImage src={user!.avatar!} />
+          <AvatarFallback className="text-2xl">{user!.name.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
       </div>
     </header>

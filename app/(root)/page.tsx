@@ -18,6 +18,7 @@ export default async function HomePage() {
 
   return (
     <section className="section">
+      <h1 className="text-3xl font-semibold">Welcome, {user.name}!</h1>
       <Banner />
       <section className="flex flex-col gap-4">
         <h2 className="text-2xl font-semibold">Your Interviews</h2>

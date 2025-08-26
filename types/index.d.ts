@@ -34,9 +34,10 @@ interface CreateFeedbackParams {
 }
 
 interface User {
+  id: string;
   name: string;
   email: string;
-  id: string;
+  avatar?: string;
 }
 
 interface InterviewCardProps {
