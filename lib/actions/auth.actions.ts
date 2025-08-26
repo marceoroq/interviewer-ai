@@ -2,12 +2,13 @@
 
 import { cookies } from "next/headers";
 import { db, auth } from "@/lib/firebase/admin";
+import { stripUndefined } from "@/lib/utils";
 
 import { SignInParams, SignUpParams } from "@/types";
 import { ONE_WEEK } from "@/constants";
 
 export async function signUpAction(params: SignUpParams) {
-  const { uid, name, email } = params;
+  const { uid, name, email, avatar } = params;
 
   try {
     const user = await db.collection("users").doc(uid).get();
@@ -16,7 +17,8 @@ export async function signUpAction(params: SignUpParams) {
       return { success: false, message: "User already exists. Please sign in instead." };
     }
 
-    await db.collection("users").doc(uid).set({ name, email });
+    // Avatar is optional so we removed if is undefined
+    await db.collection("users").doc(uid).set(stripUndefined({ name, email, avatar }));
 
     return { success: true, message: "User created successfully. Please sign in to continue." };
   } catch (error: unknown) {
@@ -33,6 +35,37 @@ export async function signInAction(params: SignInParams) {
     await auth.verifyIdToken(idToken);
 
     // If the token is valid, set the session cookie
+    await setSessionCookie(idToken);
+
+    return { success: true, message: "User signed in successfully." };
+  } catch (error: unknown) {
+    console.error("Error signing in:", error);
+    return { success: false, message: "Invalid or expired token" };
+  }
+}
+
+export async function signInWithGoogleAction(params: SignInParams) {
+  const { idToken } = params;
+
+  try {
+    // Verify the ID token
+    const decodedClaims = await auth.verifyIdToken(idToken);
+    const uid = decodedClaims.uid;
+
+    // Check if user exists in Firestore
+    const userDocRef = db.collection("users").doc(uid);
+    const userDoc = await userDocRef.get();
+
+    // If user does not exist, create a new document
+    if (!userDoc.exists) {
+      await userDocRef.set({
+        name: decodedClaims.name,
+        email: decodedClaims.email,
+        avatar: decodedClaims.picture,
+      });
+    }
+
+    // Then set the session cookie
     await setSessionCookie(idToken);
 
     return { success: true, message: "User signed in successfully." };

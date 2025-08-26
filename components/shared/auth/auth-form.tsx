@@ -3,15 +3,19 @@
 import Link from "next/link";
 import Image from "next/image";
 import { z } from "zod";
-import { auth } from "@/lib/firebase/client";
 import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FirebaseError } from "firebase/app";
-import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { auth, googleProvider } from "@/lib/firebase/client";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 
-import { signInAction, signUpAction } from "@/lib/actions/auth.actions";
+import { signInAction, signInWithGoogleAction, signUpAction } from "@/lib/actions/auth.actions";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormFieldInput } from "@/components/shared/auth/form-field-input";
@@ -101,6 +105,27 @@ export const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
     }
   }
 
+  async function handleSignInWithGoogle() {
+    try {
+      const userCredentials = await signInWithPopup(auth, googleProvider);
+      const idToken = await userCredentials.user.getIdToken();
+      const result = await signInWithGoogleAction({ idToken });
+
+      if (!result?.success) {
+        toast.error(result.message);
+        return;
+      }
+
+      toast.success(result.message);
+      router.push("/");
+    } catch (error) {
+      console.error("Error signing in with Google:", error);
+      if (error instanceof FirebaseError) {
+        toast.error(error.message);
+      }
+    }
+  }
+
   return (
     <Card className="w-full max-w-sm mx-4">
       <CardHeader className="flex flex-col items-center gap-4">
@@ -143,6 +168,9 @@ export const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
             </Button>
           </form>
         </Form>
+        <Button className="cursor-pointer" type="submit" onClick={handleSignInWithGoogle}>
+          Sign in with Google
+        </Button>
         <p className="text-sm text-center">
           {isSignIn ? "No account yet?" : "Already have an account?"}
           <Link className="font-semibold ml-1" href={isSignIn ? "/sign-up" : "/sign-in"}>

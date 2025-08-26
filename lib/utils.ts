@@ -15,3 +15,5 @@ export function getDevIconUrl(icon: string) {
   if (normalizedTechName) return devIconBaseUrl.replaceAll("{icon}", normalizedTechName);
   return null;
 }
+
+export const stripUndefined = <T extends object>(o: T) => JSON.parse(JSON.stringify(o));
