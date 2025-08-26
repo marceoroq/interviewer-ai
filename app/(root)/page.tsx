@@ -18,10 +18,13 @@ export default async function HomePage() {
 
   return (
     <section className="section">
-      <h1 className="text-3xl font-semibold">Welcome, {user.name}!</h1>
+      <h1 className="text-3xl font-semibold capitalize">Welcome, {user.name}!</h1>
+
       <Banner />
+
       <section className="flex flex-col gap-4">
         <h2 className="text-2xl font-semibold">Your Interviews</h2>
+
         {userInterviews.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {userInterviews.map((interview) => (
@@ -30,12 +33,14 @@ export default async function HomePage() {
           </div>
         ) : (
           <p className="text-sm text-accent-foreground">
-            You haven&apos;t taken any interviews yet.
+            You haven&apos;t create any interviews yet.
           </p>
         )}
       </section>
+
       <section className="flex flex-col gap-4">
         <h2 className="text-2xl font-semibold">Take an Interviews</h2>
+
         {othersInterviews.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {othersInterviews.map((interview) => (
