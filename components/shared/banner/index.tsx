@@ -13,7 +13,7 @@ export const Banner = () => {
           Practice on real interview questions and get feedback from AI
         </p>
         <Button className="w-full md:w-fit cursor-pointer" asChild>
-          <Link href="/interview">Start an Interview</Link>
+          <Link href="/interview">Create an Interview</Link>
         </Button>
       </div>
       <Image

@@ -56,7 +56,7 @@ export const InterviewCard = async ({ interview }: { interview: Interview }) => 
           <Link
             href={feedback ? `/interview/${interview.id}/feedback` : `/interview/${interview.id}`}
           >
-            {feedback ? "Check Feedback" : "View Interview"}
+            {feedback ? "Check Feedback" : "Take Interview"}
           </Link>
         </Button>
       </CardFooter>
