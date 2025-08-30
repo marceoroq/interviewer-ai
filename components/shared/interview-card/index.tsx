@@ -10,9 +10,14 @@ import { Button } from "@/components/ui/button";
 import { DisplayTechStack } from "@/components/shared/display-tech-stack";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 
-import { interviewCovers } from "@/constants";
 import { Feedback, Interview } from "@/types";
 import { cn } from "@/lib/utils";
+
+const coverByType: Record<string, string> = {
+  technical: "/covers/technical-interview-3.jpg",
+  behavioral: "/covers/behavioral-interview.jpg",
+  mix: "/covers/mix-interview.jpg",
+};
 
 export const InterviewCard = async ({ interview }: { interview: Interview }) => {
   const user = await getCurrentUser();
@@ -29,8 +34,9 @@ export const InterviewCard = async ({ interview }: { interview: Interview }) => 
         <Image
           width={90}
           height={90}
-          src={interview.coverImage ?? `/covers${interviewCovers[Number(interview.id)]}`}
+          src={coverByType[interview.type.toLowerCase()]}
           alt={interview.role}
+          className="rounded-full aspect-square object-cover"
         />
         <h3 className="text-xl font-semibold capitalize">{interview.role} Interview</h3>
         <div className="flex gap-6">
