@@ -11,7 +11,7 @@ export default async function InterviewPage() {
     <section className="section">
       <h2 className="text-2xl font-semibold">Interview Generation</h2>
 
-      <AgentGrid username={user.name} userId={user.id} type="generate" />
+      <AgentGrid username={user.name} userId={user.id} avatar={user.avatar} type="generate" />
     </section>
   );
 }

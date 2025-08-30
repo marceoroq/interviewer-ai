@@ -18,6 +18,7 @@ import { interviewer } from "@/constants";
 interface AgentGridProps {
   username: string;
   userId: string;
+  avatar?: string;
   type: "generate" | "interview";
   interviewId?: string;
   questions?: string[];
@@ -32,6 +33,7 @@ interface SavedMessage {
 export const AgentGrid = ({
   username,
   userId,
+  avatar,
   type,
   interviewId,
   questions,
@@ -153,7 +155,7 @@ export const AgentGrid = ({
           avatar="/ai-avatar.webp"
           isSpeaking={isSpeaking}
         />
-        <Agent username={username} avatar="/user-avatar.jpg" className="hidden md:block" />
+        <Agent username={username} avatar={avatar} className="hidden md:block" />
       </div>
 
       {messages.length > 0 && <Message message={lastMessage!} />}
