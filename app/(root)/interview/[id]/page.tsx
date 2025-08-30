@@ -48,6 +48,7 @@ export default async function InterviewDetailsPage({
       <AgentGrid
         username={user.name}
         userId={user.id}
+        avatar={user.avatar}
         type="interview"
         interviewId={id}
         questions={interviewData.questions}
