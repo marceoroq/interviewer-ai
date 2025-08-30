@@ -175,7 +175,7 @@
 }
 
 @utility section {
-  @apply flex max-w-7xl mx-auto w-full px-8 xl:px-4 py-4 flex-col h-fit min-h-screen gap-6;
+  @apply flex max-w-7xl mx-auto w-full px-8 xl:px-4 py-4 flex-col h-fit gap-6;
 }
 
 @utility animate-fadeIn {
