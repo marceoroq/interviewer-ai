@@ -8,7 +8,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   if (!isUserAuthenticated) redirect("/sign-in");
 
   return (
-    <main className="flex flex-col h-screen">
+    <main className="flex flex-col h-fit">
       <Header />
       {children}
     </main>
