@@ -201,17 +201,8 @@ export const feedbackSchema = z.object({
   finalAssessment: z.string(),
 });
 
-export const interviewCovers = [
-  "/adobe.png",
-  "/amazon.png",
-  "/facebook.png",
-  "/hostinger.png",
-  "/pinterest.png",
-  "/quora.png",
-  "/reddit.png",
-  "/skype.png",
-  "/spotify.png",
-  "/telegram.png",
-  "/tiktok.png",
-  "/yahoo.png",
-];
+export const coverByType: Record<string, string> = {
+  technical: "/covers/technical-interview-3.jpg",
+  behavioral: "/covers/behavioral-interview.jpg",
+  mix: "/covers/mix-interview.jpg",
+};

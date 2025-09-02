@@ -6,6 +6,7 @@ import { InterviewService } from "@/services/interview.service";
 
 import { AgentGrid } from "@/components/shared/agent/agent-grid";
 import { DisplayTechStack } from "@/components/shared/display-tech-stack";
+import { coverByType } from "@/constants";
 
 export default async function InterviewDetailsPage({
   params,
@@ -28,11 +29,11 @@ export default async function InterviewDetailsPage({
 
   return (
     <section className="section">
-      <div className="flex items-center justify-between">
-        <div className="flex gap-4 items-center">
+      <div className="flex flex-col sm:flex-row gap-4 items-center justify-between">
+        <div className="flex flex-col sm:flex-row gap-4 items-center">
           <div className="flex gap-4 items-center">
             <Image
-              src={interviewData.coverImage}
+              src={coverByType[interviewData.type.toLowerCase()]}
               alt="cover image"
               width={40}
               height={40}
@@ -41,10 +42,11 @@ export default async function InterviewDetailsPage({
             <h3 className="text-2xl font-semibold capitalize">{interviewData.role} Interview</h3>
           </div>
 
-          <DisplayTechStack techstack={interviewData.techstack} />
+          <DisplayTechStack className="hidden md:flex" techstack={interviewData.techstack} />
         </div>
         <p className="bg-slate-700 px-4 py-2 rounded-lg h-fit capitalize">{interviewData.type}</p>
       </div>
+      <DisplayTechStack className="hidden sm:max-md:flex" techstack={interviewData.techstack} />
       <AgentGrid
         username={user.name}
         userId={user.id}

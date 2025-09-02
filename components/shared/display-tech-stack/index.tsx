@@ -9,7 +9,7 @@ export const DisplayTechStack = ({
   techstack: string[];
 }) => {
   return (
-    <div className={cn("flex flex-wrap", className)}>
+    <div className={cn("flex", className)}>
       {techstack.map((tech) => (
         <div className="group rounded-full relative -ml-2 first:ml-0" key={tech}>
           <Image

@@ -11,13 +11,8 @@ import { DisplayTechStack } from "@/components/shared/display-tech-stack";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 
 import { Feedback, Interview } from "@/types";
+import { coverByType } from "@/constants";
 import { cn } from "@/lib/utils";
-
-const coverByType: Record<string, string> = {
-  technical: "/covers/technical-interview-3.jpg",
-  behavioral: "/covers/behavioral-interview.jpg",
-  mix: "/covers/mix-interview.jpg",
-};
 
 export const InterviewCard = async ({ interview }: { interview: Interview }) => {
   const user = await getCurrentUser();
