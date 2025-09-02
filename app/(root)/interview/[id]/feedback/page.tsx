@@ -25,11 +25,11 @@ export default async function FeedbackDetailsPage({ params }: { params: Promise<
 
   return (
     <section className="section h-fit max-w-4xl pb-8">
-      <h1 className="text-5xl font-bold mb-4 text-center">
+      <h1 className="text-4xl sm:text-5xl font-bold mb-4 text-center">
         Feedback on the Interview — {interview?.role}
       </h1>
 
-      <div className="flex justify-center gap-6">
+      <div className="flex flex-col items-center sm:flex-row justify-center gap-6">
         <div className="flex text-lg gap-2 items-center text-accent-foreground">
           <StarIcon className="w-5 h-5" />
           <p>
@@ -45,7 +45,7 @@ export default async function FeedbackDetailsPage({ params }: { params: Promise<
 
       <Separator />
 
-      <div className="px-16">
+      <div className="px-4 sm:px-16">
         <p className="mb-6 leading-6.5">{feedback?.finalAssessment}</p>
 
         <div className="flex flex-col">
@@ -88,11 +88,12 @@ export default async function FeedbackDetailsPage({ params }: { params: Promise<
           </div>
         )}
 
-        <p className="text-3xl font-bold my-8">
-          Final Veredict: <VeredictBadge totalScore={feedback?.totalScore || 0} />
+        <p className="flex flex-col items-center sm:flex-row gap-2 text-2xl md:text-3xl font-bold my-8">
+          <span>Final Veredict:</span>
+          <VeredictBadge totalScore={feedback?.totalScore || 0} />
         </p>
 
-        <div className="flex gap-4 w-full mt-16">
+        <div className="flex flex-col sm:flex-row gap-4 w-full mt-16">
           <Button asChild variant="secondary" className="flex-grow cursor-pointer">
             <Link href="/">Back to Dashboard</Link>
           </Button>
