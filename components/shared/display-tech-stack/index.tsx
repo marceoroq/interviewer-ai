@@ -1,9 +1,15 @@
 import Image from "next/image";
-import { getDevIconUrl } from "@/lib/utils";
+import { cn, getDevIconUrl } from "@/lib/utils";
 
-export const DisplayTechStack = ({ techstack }: { techstack: string[] }) => {
+export const DisplayTechStack = ({
+  className,
+  techstack,
+}: {
+  className?: string;
+  techstack: string[];
+}) => {
   return (
-    <div className="flex">
+    <div className={cn("flex flex-wrap", className)}>
       {techstack.map((tech) => (
         <div className="group rounded-full relative -ml-2 first:ml-0" key={tech}>
           <Image

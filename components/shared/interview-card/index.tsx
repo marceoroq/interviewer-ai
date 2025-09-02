@@ -26,7 +26,7 @@ export const InterviewCard = async ({ interview }: { interview: Interview }) => 
     interview.id && user!.id ? await InterviewService.getFeedback(interview.id, user!.id) : null;
 
   return (
-    <Card className="justify-self-center">
+    <Card className="justify-self-center @container">
       <CardHeader className="relative flex flex-col gap-4">
         <div className="absolute -top-6 right-0 bg-[#24273A] py-3 font-medium rounded-bl-xl px-4 capitalize">
           {interview.type}
@@ -56,8 +56,8 @@ export const InterviewCard = async ({ interview }: { interview: Interview }) => 
             "You havent taken this interview yet. Take it now to improve your skills."}
         </p>
       </CardContent>
-      <CardFooter className="flex justify-between">
-        <DisplayTechStack techstack={interview.techstack} />
+      <CardFooter className="flex flex-col @min-[395px]:flex-row gap-2 justify-between">
+        <DisplayTechStack className="hidden @min-[395px]:flex" techstack={interview.techstack} />
         <Button asChild className={cn(feedback && "bg-teal-600 hover:bg-teal-700")}>
           <Link
             href={feedback ? `/interview/${interview.id}/feedback` : `/interview/${interview.id}`}
