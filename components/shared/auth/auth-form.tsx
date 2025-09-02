@@ -72,30 +72,32 @@ export const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
   }
 
   async function handleSignUp(values: z.infer<typeof formSchema>) {
-    const { name, email, password } = values;
-    try {
-      const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
+    toast.warning("This is a demo view. If you want test it, please sign up with google.");
+    console.log("Try to sign up with email and password", values);
+    // const { name, email, password } = values;
+    // try {
+    //   const userCredentials = await createUserWithEmailAndPassword(auth, email, password);
 
-      const response = await signUpAction({
-        uid: userCredentials.user.uid,
-        name: name!,
-        email,
-      });
+    //   const response = await signUpAction({
+    //     uid: userCredentials.user.uid,
+    //     name: name!,
+    //     email,
+    //   });
 
-      if (!response?.success) {
-        toast.error(response.message);
-        return;
-      }
+    //   if (!response?.success) {
+    //     toast.error(response.message);
+    //     return;
+    //   }
 
-      toast.success(response.message);
-      router.push("/sign-in");
-    } catch (error) {
-      if (error instanceof FirebaseError && error.code === "auth/email-already-in-use") {
-        toast.error("Email already in use. Try with another email or sign in.");
-        return;
-      }
-      toast.error("Failed to sign up. Please try again.");
-    }
+    //   toast.success(response.message);
+    //   router.push("/sign-in");
+    // } catch (error) {
+    //   if (error instanceof FirebaseError && error.code === "auth/email-already-in-use") {
+    //     toast.error("Email already in use. Try with another email or sign in.");
+    //     return;
+    //   }
+    //   toast.error("Failed to sign up. Please try again.");
+    // }
   }
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
